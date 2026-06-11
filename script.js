@@ -95,7 +95,7 @@ const overlay = document.getElementById('result-overlay');
 const winnerName = document.getElementById('winner-name');
 
 // App State Memory
-let foodItems = ['Pizza', 'Sushi', 'Tacos'];
+let foodItems = [];
 
 /**
  * Syncs the application state array with the dynamic HTML list UI layout.
@@ -113,8 +113,8 @@ function renderList() {
         `;
         list.appendChild(chip);
     });
-    // Require a minimum of two craving selections to roll choices
-    rollBtn.disabled = foodItems.length < 2;
+    // Allow rolling as soon as the user has suggested one food
+    rollBtn.disabled = foodItems.length === 0;
 }
 
 /**
@@ -122,7 +122,8 @@ function renderList() {
  */
 function addItem() {
     const val = input.value.trim();
-    if (val && !foodItems.includes(val)) {
+    const alreadyExists = foodItems.some(item => item.toLowerCase() === val.toLowerCase());
+    if (val && !alreadyExists) {
         foodItems.push(val);
         input.value = '';
         renderList();
@@ -224,7 +225,7 @@ function selectWinner() {
  * Triggers decision algorithm animation and unveils structural winner modal display view.
  */
 function rollTheDice() {
-    if (foodItems.length < 2) return;
+    if (foodItems.length === 0) return;
     
     rollBtn.classList.add('animate-roll');
     rollBtn.innerText = "Consulting the chaos...";
