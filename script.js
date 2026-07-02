@@ -91,7 +91,10 @@ const input = document.getElementById('food-input');
 const addBtn = document.getElementById('add-btn');
 const list = document.getElementById('food-list');
 const rollBtn = document.getElementById('roll-btn');
+const recipeBtn = document.getElementById('recipe-btn');
 const overlay = document.getElementById('result-overlay');
+const recipeOverlay = document.getElementById('recipe-overlay');
+const closeRecipeBtn = document.getElementById('close-recipe-btn');
 const winnerName = document.getElementById('winner-name');
 
 // App State Memory
@@ -253,10 +256,25 @@ function closeResult() {
     setTimeout(() => overlay.classList.add('hidden'), 300);
 }
 
+function openRecipePopup() {
+    recipeOverlay.classList.remove('hidden');
+    setTimeout(() => recipeOverlay.classList.replace('opacity-0', 'opacity-100'), 10);
+}
+
+function closeRecipePopup() {
+    recipeOverlay.classList.replace('opacity-100', 'opacity-0');
+    setTimeout(() => recipeOverlay.classList.add('hidden'), 300);
+}
+
 // Global Event Declarations Engine Configuration setup
 addBtn.addEventListener('click', addItem);
 input.addEventListener('keypress', (e) => { if (e.key === 'Enter') addItem(); });
 rollBtn.addEventListener('click', rollTheDice);
+recipeBtn.addEventListener('click', openRecipePopup);
+closeRecipeBtn.addEventListener('click', closeRecipePopup);
+recipeOverlay.addEventListener('click', (e) => {
+    if (e.target === recipeOverlay) closeRecipePopup();
+});
 
 // Interactive Light Leak mouse tracking mapping system
 document.addEventListener('mousemove', (e) => {
@@ -272,3 +290,6 @@ document.addEventListener('mousemove', (e) => {
 
 // Initializing Initial Data Paint Render Call
 renderList();
+
+// Show the recipe popup automatically when the user enters the site
+window.addEventListener('load', openRecipePopup);
